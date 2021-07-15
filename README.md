@@ -1,15 +1,7 @@
 # unity-extension
 添加平时加的一些Unity扩展，基本上都是很简单的一些东西，主要是积累和方便以后存取。
 
-- [unity-extension](#unity-extension)
-  * [1，Untiy扩展Svn使用](#1-untiy--svn--)
-    + [[代码路径](Assets/Lib/Editor/SVNTools)](#-------assets-lib-editor-svntools-)
-  * [2，打开方式](#2-----)
-    + [[代码路径](Assets/Lib/Editor/OpenWay)](#-------assets-lib-editor-openway-)
-  * [3，UGUI扩展（拼图专用）](#3-ugui--------)
-    + [[代码路径](Assets/Lib/Editor/UGUI)](#-------assets-lib-editor-ugui-)
-  * [4，动态设置GameView](#4-----gameview)
-  * [5，动态设置闪屏](#5-------)
+[TOC]
 
 ## 1，Untiy扩展Svn使用
 
