@@ -89,7 +89,7 @@ public class GameExtension : Editor
     ///     设置闪屏
     /// </summary>
     /// <param name="res">图片在Asset路径</param>
-    private static void SetSplashScreen(string res)
+    public static void SetSplashScreen(string res)
     {
         //常规代码
         PlayerSettings.SplashScreen.show = true;
@@ -97,9 +97,8 @@ public class GameExtension : Editor
         PlayerSettings.SplashScreen.drawMode = PlayerSettings.SplashScreen.DrawMode.AllSequential;
         PlayerSettings.SplashScreen.showUnityLogo = false;
         //PlayerSettings.SplashScreen.logos = null;
-
-
-        var tex = AssetDatabase.LoadAssetAtPath<Texture>(res);
+        
+        var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(res);
         var obj = typeof(PlayerSettings);
         var method = obj.GetMethod("FindProperty", BindFlags);
 
@@ -115,13 +114,19 @@ public class GameExtension : Editor
         property.serializedObject.Update();
         property.objectReferenceValue = tex;
         property.serializedObject.ApplyModifiedProperties();
+        
+        property = method.Invoke(obj, new object[] {"m_VirtualRealitySplashScreen"}) as SerializedProperty;
+        // ReSharper disable once PossibleNullReferenceException
+        property.serializedObject.Update();
+        property.objectReferenceValue = tex;
+        property.serializedObject.ApplyModifiedProperties();
 
         property = method.Invoke(obj, new object[] {"iOSLaunchScreenLandscape"}) as SerializedProperty;
         // ReSharper disable once PossibleNullReferenceException
         property.serializedObject.Update();
         property.objectReferenceValue = tex;
         property.serializedObject.ApplyModifiedProperties();
-
+        
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
@@ -303,52 +308,6 @@ public class GameExtension : Editor
 
         return assetPaths;
     }
-
-    #region UGUI 类似PS的移动，ijkl，
-
-#if UNITY_2017
-    private const string up = "UGUI/Move/MoveUp %i";
-    private const string down = "UGUI/Move/MoveDown %k";
-    private const string left = "UGUI/Move/MoveLeft %j";
-    private const string right = "UGUI/Move/MoveRight %l";
-#else
-    private const string up = "GameObject/Move/MoveUp &UP";
-    private const string down = "GameObject/Move/MoveDown &DOWN";
-    private const string left = "GameObject/Move/MoveLeft &LEFT";
-    private const string right = "GameObject/Move/MoveRight &RIGHT";
-#endif
-
-    [MenuItem(up, false, 10)]
-    public static void MoveUp()
-    {
-        Move(Vector3.up);
-    }
-
-    [MenuItem(down, false, 10)]
-    public static void MoveDown()
-    {
-        Move(Vector3.down);
-    }
-
-    [MenuItem(left, false, 10)]
-    public static void MoveLeft()
-    {
-        Move(Vector3.left);
-    }
-
-    [MenuItem(right, false, 10)]
-    public static void MoveRight()
-    {
-        Move(Vector3.right);
-    }
-
-    private static void Move(Vector3 v3)
-    {
-        foreach (var item in Selection.gameObjects)
-            item.transform.localPosition += v3;
-    }
-
-    #endregion
 
     /// <summary>
     ///     对齐UI相机的UI

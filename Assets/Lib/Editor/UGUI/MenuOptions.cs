@@ -452,5 +452,51 @@ namespace UnityEditor.UI
             // No canvas in the scene at all? Then create a new one.
             return CreateNewUI();
         }
+        
+        #region UGUI 类似PS的移动，ijkl，
+
+#if UNITY_2017
+        private const string up = "UGUI/Move/MoveUp %i";
+        private const string down = "UGUI/Move/MoveDown %k";
+        private const string left = "UGUI/Move/MoveLeft %j";
+        private const string right = "UGUI/Move/MoveRight %l";
+#else
+    private const string up = "GameObject/Move/MoveUp &UP";
+    private const string down = "GameObject/Move/MoveDown &DOWN";
+    private const string left = "GameObject/Move/MoveLeft &LEFT";
+    private const string right = "GameObject/Move/MoveRight &RIGHT";
+#endif
+
+        [MenuItem(up, false, 10)]
+        public static void MoveUp()
+        {
+            Move(Vector3.up);
+        }
+
+        [MenuItem(down, false, 10)]
+        public static void MoveDown()
+        {
+            Move(Vector3.down);
+        }
+
+        [MenuItem(left, false, 10)]
+        public static void MoveLeft()
+        {
+            Move(Vector3.left);
+        }
+
+        [MenuItem(right, false, 10)]
+        public static void MoveRight()
+        {
+            Move(Vector3.right);
+        }
+
+        private static void Move(Vector3 v3)
+        {
+            foreach (var item in Selection.gameObjects)
+                item.transform.localPosition += v3;
+        }
+
+        #endregion
     }
 }
