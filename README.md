@@ -1,9 +1,15 @@
 # unity-extension
 添加平时加的一些Unity扩展，基本上都是很简单的一些东西，主要是积累和方便以后存取。
 
-[TOC]
-
-
+- [unity-extension](#unity-extension)
+  * [1，Untiy扩展Svn使用](#1-untiy--svn--)
+    + [[代码路径](Assets/Lib/Editor/SVNTools)](#-------assets-lib-editor-svntools-)
+  * [2，打开方式](#2-----)
+    + [[代码路径](Assets/Lib/Editor/OpenWay)](#-------assets-lib-editor-openway-)
+  * [3，UGUI扩展（拼图专用）](#3-ugui--------)
+    + [[代码路径](Assets/Lib/Editor/UGUI)](#-------assets-lib-editor-ugui-)
+  * [4，动态设置GameView](#4-----gameview)
+  * [5，动态设置闪屏](#5-------)
 
 ## 1，Untiy扩展Svn使用
 
@@ -19,7 +25,7 @@
 
 这个功能有时候不想用vs，就简单修改个个配置就很方便。
 
-### [路径](Assets/Lib/Editor/OpenWay)
+### [代码路径](Assets/Lib/Editor/OpenWay)
 
 ## 3，UGUI扩展（拼图专用）
 
@@ -27,9 +33,13 @@
 
 这个功能扩展了用 I， J， K， L，控制物体的小范围移动，还有可以覆盖UGUI自带的快捷键，创建一些列UI，我这里是重新搞了一个快捷键，没有覆盖他的
 
+### [代码路径](Assets/Lib/Editor/UGUI)
+
 ## 4，动态设置GameView
 
-![动态设置分辨率](Gif/%E5%8A%A8%E6%80%81%E8%AE%BE%E7%BD%AE%E5%88%86%E8%BE%A8%E7%8E%87.gif)
+![](Gif/%E5%8A%A8%E6%80%81%E8%AE%BE%E7%BD%AE%E5%88%86%E8%BE%A8%E7%8E%87.gif)
+
+接口示例
 
 ```c#
 GameExtension.SetGameView(1000, 1000, "测试分辨率");
@@ -37,7 +47,9 @@ GameExtension.SetGameView(1000, 1000, "测试分辨率");
 
 ## 5，动态设置闪屏
 
-![动态设置闪屏](Gif/%E5%8A%A8%E6%80%81%E8%AE%BE%E7%BD%AE%E9%97%AA%E5%B1%8F.gif)
+![](Gif/%E5%8A%A8%E6%80%81%E8%AE%BE%E7%BD%AE%E9%97%AA%E5%B1%8F.gif)
+
+接口示例
 
 ```c#
 GameExtension.SetSplashScreen("Assets/Res/Splash.png");
