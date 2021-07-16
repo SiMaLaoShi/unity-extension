@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Utility;
 using Object = UnityEngine.Object;
 
 public class GameExtension : Editor
@@ -10,6 +11,12 @@ public class GameExtension : Editor
     public const BindingFlags BindFlags =
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
 
+    public enum GameViewSizeType
+    {
+        AspectRatio,
+        FixedResolution
+    };
+    
     #region 设置GameView
 
     private static void SetGameViewByWH()
@@ -28,7 +35,7 @@ public class GameExtension : Editor
         sizeSelectionCallbackMethod.Invoke(window, new object[] {index, null});
     }
 
-    public static void SetGameView(int width, int height, string baseText = "")
+    public static void SetGameView(int width, int height, string baseText = "", GameViewSizeType sizeType = GameViewSizeType.FixedResolution)
     {
         var sizesType = typeof(Editor).Assembly.GetType("UnityEditor.GameViewSizes");
         var singleType = typeof(ScriptableSingleton<>).MakeGenericType(sizesType);
@@ -64,7 +71,7 @@ public class GameExtension : Editor
         }
 
         var param = new object[4];
-        param[0] = 1;
+        param[0] = (int)sizeType;
         param[1] = width;
         param[2] = height;
         param[3] = string.IsNullOrEmpty(baseText) ? "" + width + "x" + height : baseText;
@@ -244,7 +251,7 @@ public class GameExtension : Editor
     #region 拷贝路径
 
     [MenuItem("Assets/拷贝/ABName", false, 1)]
-    private static void CopyBundleName()
+    public static void CopyBundleName()
     {
         var guids = Selection.assetGUIDs;
         var str = "";
@@ -259,7 +266,7 @@ public class GameExtension : Editor
     }
 
     [MenuItem("Assets/拷贝/GUID", false, 1)]
-    private static void CopyGUID()
+    public static void CopyGUID()
     {
         var guids = Selection.assetGUIDs;
         var str = "";
@@ -269,7 +276,7 @@ public class GameExtension : Editor
     }
 
     [MenuItem("Assets/拷贝/AssetPath", false, 1)]
-    private static void CopyAssetPath()
+    public static void CopyAssetPath()
     {
         var guids = Selection.assetGUIDs;
         var str = "";
@@ -278,7 +285,7 @@ public class GameExtension : Editor
     }
 
     [MenuItem("Assets/拷贝/FilePath", false, 1)]
-    private static void CopyFilePath()
+    public static void CopyFilePath()
     {
         var guids = Selection.assetGUIDs;
         var str = "";
@@ -325,5 +332,31 @@ public class GameExtension : Editor
         sv.rotation = cam.transform.rotation;
         sv.orthographic = true;
         sv.Repaint();
+    }
+
+    public static void GUIDToAssetPath(string guid)
+    {
+        GUIUtility.systemCopyBuffer = AssetDatabase.GUIDToAssetPath(guid);
+    }
+
+    public static void AssetPathToGUID(string assetPath)
+    {
+        GUIUtility.systemCopyBuffer = AssetDatabase.AssetPathToGUID(assetPath);
+    }
+
+    public static void FindBigPicture()
+    {
+        var guids = AssetDatabase.FindAssets("t:texture");
+        int count = 0;
+        foreach (var guid in guids)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            Texture texture2D = AssetDatabase.LoadAssetAtPath<Texture>(AssetDatabase.GUIDToAssetPath(guid));
+            if (texture2D && texture2D.width > 1024 && texture2D.height > 1024)
+                Debug.Log(path);				
+            RuntimeUtility.UpdateProgress(count, guids.Length, path);
+            count++;
+        }
+        EditorUtility.ClearProgressBar();
     }
 }

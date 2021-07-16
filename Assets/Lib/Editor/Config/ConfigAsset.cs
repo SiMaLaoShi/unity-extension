@@ -7,7 +7,12 @@ public class ConfigAsset : ScriptableObject
     public string NotePad = @"notepad.exe";
     public string NotePadPPPath = @"C:\Program Files (x86)\Notepad++\notepad++.exe";
     public string SublimePath = @"C:\Program Files\Sublime Text 3\sublime_text.exe";
-
+    public bool useAni = false;
+    public bool isHookApplication = false;
+    public bool isHookStreamingAssetsPath = false;
+    public string szRemoteStreamingAssetsPath = "";
+    public bool isHookPersistentDataPath = false;
+    public string szRemotePersistentDataPath = "";
     public static ConfigAsset Instance
     {
         get

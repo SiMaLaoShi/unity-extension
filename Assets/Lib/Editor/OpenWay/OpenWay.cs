@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class OpenWay : Editor
 {
+#if UNITY_EDITOR_WIN
     [MenuItem("Assets/打开方式/NotePad++")]
     private static void NotePadPlusPlusRun()
     {
@@ -28,6 +29,14 @@ public class OpenWay : Editor
         var assetPaths = GameExtension.GetSelectionAssetPaths(true);
         OsRun(string.Join(" ", assetPaths.ToArray()), ConfigAsset.Instance.NotePad);
     }
+    
+    [MenuItem("Assets/打开方式/NotePad打开.Meta(选一个)")]
+    private static void OpenMeta()
+    {
+        var guids = Selection.assetGUIDs;
+        if (guids.Length == 1)
+            OsRun(Environment.CurrentDirectory + "/" + AssetDatabase.GUIDToAssetPath(guids[0]) + ".meta", ConfigAsset.Instance.NotePad);
+    }
 
     private static void OsRun(string args, string exePath)
     {
@@ -42,4 +51,6 @@ public class OpenWay : Editor
             WorkingDirectory = workDirectory
         });
     }
+#endif
+    
 }
