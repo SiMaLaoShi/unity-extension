@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using Utility;
-using Object = UnityEngine.Object;
+using UObject = UnityEngine.Object;
+using Object = System.Object;
+using Editor = UnityEditor.Editor;
 
-public class GameExtension : Editor
+public class GameExtension : UnityEditor.Editor
 {
     public const BindingFlags BindFlags =
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
@@ -201,7 +205,7 @@ public class GameExtension : Editor
         //这里必须获取到prefab实例的根节点，否则ReplacePrefab保存不了
         //GameObject prefabGo = GetPrefabInstanceParent(obj);
         var prefabGo = obj;
-        Object prefabAsset = null;
+        UObject prefabAsset = null;
         if (prefabGo != null)
         {
             prefabAsset = PrefabUtility.GetPrefabParent(prefabGo);
@@ -358,5 +362,43 @@ public class GameExtension : Editor
             count++;
         }
         EditorUtility.ClearProgressBar();
+    }
+    
+    /// <summary>
+    /// 通过.colors文件获取一个color的List
+    /// </summary>
+    /// <param name="assetPath">资产路径</param>
+    /// <returns></returns>
+    public static List<Color> LoadColorPresetLib(string assetPath)
+    {
+        var path = Path.Combine(Environment.CurrentDirectory, assetPath);
+        UnityEngine.Object[] instanceArray = InternalEditorUtility.LoadSerializedFileAndForget(path);
+        UObject colorLibInstance = instanceArray[0];
+        Type typeColorPresetLibrary = Type.GetType("UnityEditor.ColorPresetLibrary,UnityEditor");
+        List<Color> colors = new List<Color>();
+        if (typeColorPresetLibrary != null)
+        {
+            MethodInfo countFunc = typeColorPresetLibrary.GetMethod("Count");
+            MethodInfo getNameFunc = typeColorPresetLibrary.GetMethod("GetName");
+            MethodInfo getPresetFunc = typeColorPresetLibrary.GetMethod("GetPreset");
+            if (null != colorLibInstance)
+            {
+                if (countFunc != null)
+                {
+                    int count = (int)countFunc.Invoke(colorLibInstance, null);
+                    for (int i = 0; i < count; ++i)
+                    {
+                        if (getPresetFunc != null)
+                        {
+                            Color col = (Color)getPresetFunc.Invoke(colorLibInstance, new Object[1] { i });
+                            colors.Add(col);
+                        }
+                    }
+                }
+            }
+            return colors;
+        }
+
+        return colors;
     }
 }
