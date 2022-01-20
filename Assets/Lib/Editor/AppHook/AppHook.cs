@@ -1,4 +1,5 @@
-﻿using PlayHooky;
+﻿using Lib.Editor.Scriptable;
+using PlayHooky;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,9 +11,9 @@ public class AppHook : MonoBehaviour {
 	{
 		get
 		{
-			if (!ConfigAsset.Instance.isHookApplication)
+			if (!GlobalScriptableObject.Instance.isHookApplication)
 				return oldStreamingAssetsPath;
-			var p = ConfigAsset.Instance.szRemoteStreamingAssetsPath;
+			var p = GlobalScriptableObject.Instance.strRemoteStreamingAssetsPath;
 			return p == "" ? oldStreamingAssetsPath : p;
 		}
 	}
@@ -21,9 +22,9 @@ public class AppHook : MonoBehaviour {
 	{
 		get
 		{
-			if (!ConfigAsset.Instance.isHookApplication)
+			if (!GlobalScriptableObject.Instance.isHookApplication)
 				return oldPersistentDataPath;
-			var p = ConfigAsset.Instance.szRemotePersistentDataPath;
+			var p = GlobalScriptableObject.Instance.strRemotePersistentDataPath;
 			return p == "" ? oldPersistentDataPath : p;
 		}
 	}
@@ -35,13 +36,13 @@ public class AppHook : MonoBehaviour {
 	public static void OnStartGame()
 	{
 		EditorApplication.playModeStateChanged += OnPlayerModeStateChanged;
-		if (!ConfigAsset.Instance.isHookApplication)
+		if (!GlobalScriptableObject.Instance.isHookApplication)
 			return;
 		HookManager manager = new HookManager();
 		//这里Hook streamingAssetsPath，因为本身自动属性就是一个方法，直接用这个替换就行
-		if (ConfigAsset.Instance.isHookStreamingAssetsPath)
+		if (GlobalScriptableObject.Instance.isHookStreamingAssetsPath)
 			manager.Hook(typeof(Application).GetMethod("get_streamingAssetsPath"), typeof(AppHook).GetMethod("get_streamingAssetsPath"));
-		if (ConfigAsset.Instance.isHookPersistentDataPath)
+		if (GlobalScriptableObject.Instance.isHookPersistentDataPath)
 			manager.Hook(typeof(Application).GetMethod("get_persistentDataPath"), typeof(AppHook).GetMethod("get_persistentDataPath")); Debug.Log("Application.streamingAssetsPath:" + Application.streamingAssetsPath);
 		Debug.Log("Application.persistentDataPath:" + Application.persistentDataPath);
 		Debug.Log("Application.streamingAssetsPath:" + Application.streamingAssetsPath);

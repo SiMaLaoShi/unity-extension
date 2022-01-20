@@ -4,10 +4,11 @@ using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
-//todo 命令行和文件全部都走配置
-public static class SVNTool
+namespace Lib.Editor
 {
-    /// <summary>
+    public partial class CommonUtility 
+    {
+         /// <summary>
     ///     SVN更新指定的路径
     ///     路径示例：Assets/1.png
     /// </summary>
@@ -104,35 +105,35 @@ public static class SVNTool
     [MenuItem("Assets/SVN Tool/SVN 更新")]
     private static void SvnToolUpdate()
     {
-        var assetPaths = GameExtension.GetSelectionAssetPaths();
+        var assetPaths = CommonUtility.GetSelectionAssetPaths();
         UpdateAtPaths(assetPaths);
     }
 
     [MenuItem("Assets/SVN Tool/SVN 提交...")]
     private static void SvnToolCommit()
     {
-        var assetPaths = GameExtension.GetSelectionAssetPaths();
+        var assetPaths = CommonUtility.GetSelectionAssetPaths();
         CommitAtPaths(assetPaths);
     }
 
     [MenuItem("Assets/SVN Tool/SVN 还原")]
     private static void SvnToolRevert()
     {
-        var assetPaths = GameExtension.GetSelectionAssetPaths();
+        var assetPaths = CommonUtility.GetSelectionAssetPaths();
         RevertAtPaths(assetPaths);
     }
 
     [MenuItem("Assets/SVN Tool/SVN 增加")]
     private static void SvnToolAdd()
     {
-        var assetPaths = GameExtension.GetSelectionAssetPaths();
+        var assetPaths = CommonUtility.GetSelectionAssetPaths();
         AddAtPaths(assetPaths);
     }
 
     [MenuItem("Assets/SVN Tool/显示日志")]
     private static void SvnToolLog()
     {
-        var assetPaths = GameExtension.GetSelectionAssetPaths();
+        var assetPaths = CommonUtility.GetSelectionAssetPaths();
         if (assetPaths.Count == 0) return;
 
         // 显示日志，只能对单一资产
@@ -145,7 +146,7 @@ public static class SVNTool
     [MenuItem("Assets/SVN Tool/检查修改")]
     private static void SvnCheckModify()
     {
-        var assetPaths = GameExtension.GetSelectionAssetPaths();
+        var assetPaths = CommonUtility.GetSelectionAssetPaths();
         if (assetPaths.Count == 0) return;
         // 显示日志，只能对单一资产
         var arg = "/command:diff /closeonend:0 /path:\"";
@@ -157,7 +158,7 @@ public static class SVNTool
     [MenuItem("Assets/SVN Tool/追溯(仅文件)")]
     private static void SvnBlame()
     {
-        var assetPaths = GameExtension.GetSelectionAssetPaths();
+        var assetPaths = CommonUtility.GetSelectionAssetPaths();
         if (assetPaths.Count == 0) return;
         // 显示日志，只能对单一资产
         var arg = "/command:blame /closeonend:0 /path:\"";
@@ -202,5 +203,6 @@ public static class SVNTool
             Arguments = arg,
             WorkingDirectory = workDirectory
         });
+    }
     }
 }

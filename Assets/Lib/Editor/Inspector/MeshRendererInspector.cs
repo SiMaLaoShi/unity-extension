@@ -2,60 +2,63 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MeshRenderer), true)]
-public class MeshRendererInspector : Editor
+namespace Lib.Editor.Inspector
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(MeshRenderer), true)]
+    public class MeshRendererInspector : UnityEditor.Editor
     {
-        base.OnInspectorGUI();
-        OnGUISortingLayer();
-    }
-
-    private void OnGUISortingLayer()
-    {
-        GUILayout.Space(6);
-
-        var rend = (MeshRenderer) target;
-
-        GUILayout.BeginVertical("box");
-
-        var layerNames = SortingLayer.layers.Select(x => x.name).ToList();
-        EditorGUI.BeginChangeCheck();
-        var selectedIndex = EditorGUILayout.Popup("SortingLayerName", layerNames.IndexOf(rend.sortingLayerName),
-            layerNames.ToArray());
-        if (EditorGUI.EndChangeCheck())
+        public override void OnInspectorGUI()
         {
-            rend.sortingLayerName = SortingLayer.layers[selectedIndex].name;
-            EditorUtility.SetDirty(rend.gameObject);
+            base.OnInspectorGUI();
+            OnGUISortingLayer();
         }
 
-        EditorGUI.BeginChangeCheck();
-        var sortingOrder = EditorGUILayout.IntField("SortingOrder", rend.sortingOrder);
-        if (EditorGUI.EndChangeCheck())
+        private void OnGUISortingLayer()
         {
-            rend.sortingOrder = sortingOrder;
-            EditorUtility.SetDirty(rend.gameObject);
+            GUILayout.Space(6);
+
+            var rend = (MeshRenderer) target;
+
+            GUILayout.BeginVertical("box");
+
+            var layerNames = SortingLayer.layers.Select(x => x.name).ToList();
+            EditorGUI.BeginChangeCheck();
+            var selectedIndex = EditorGUILayout.Popup("SortingLayerName", layerNames.IndexOf(rend.sortingLayerName),
+                layerNames.ToArray());
+            if (EditorGUI.EndChangeCheck())
+            {
+                rend.sortingLayerName = SortingLayer.layers[selectedIndex].name;
+                EditorUtility.SetDirty(rend.gameObject);
+            }
+
+            EditorGUI.BeginChangeCheck();
+            var sortingOrder = EditorGUILayout.IntField("SortingOrder", rend.sortingOrder);
+            if (EditorGUI.EndChangeCheck())
+            {
+                rend.sortingOrder = sortingOrder;
+                EditorUtility.SetDirty(rend.gameObject);
+            }
+
+            var mats = rend.sharedMaterials;
+            foreach (var mat in mats)
+                DrawMaterialRenderQueue(mat);
+
+            GUILayout.EndVertical();
         }
 
-        var mats = rend.sharedMaterials;
-        foreach (var mat in mats)
-            DrawMaterialRenderQueue(mat);
-
-        GUILayout.EndVertical();
-    }
-
-    private void DrawMaterialRenderQueue(Material mat)
-    {
-        GUILayout.BeginHorizontal();
-        EditorGUILayout.ObjectField(mat, typeof(Material), false);
-        EditorGUI.BeginChangeCheck();
-        var val = EditorGUILayout.IntField("RenderQueue", mat.renderQueue);
-        if (EditorGUI.EndChangeCheck())
+        private void DrawMaterialRenderQueue(Material mat)
         {
-            mat.renderQueue = val;
-            EditorUtility.SetDirty(mat);
-        }
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.ObjectField(mat, typeof(Material), false);
+            EditorGUI.BeginChangeCheck();
+            var val = EditorGUILayout.IntField("RenderQueue", mat.renderQueue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                mat.renderQueue = val;
+                EditorUtility.SetDirty(mat);
+            }
 
-        GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+        }
     }
 }
