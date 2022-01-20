@@ -9,7 +9,7 @@
 
 ![Svn工具](Gif/Svn%E5%B7%A5%E5%85%B7.gif)
 
-### [代码路径](Assets/Lib/Editor/SVNTools)
+### [代码路径](Assets/Lib/Editor/Utility/Utility.Svn.cs)
 
 ## 2，打开方式
 
@@ -17,7 +17,7 @@
 
 这个功能有时候不想用vs，就简单修改个个配置就很方便。
 
-### [代码路径](Assets/Lib/Editor/OpenWay)
+### [代码路径](Assets/Lib/Editor/Utility/Utility.OpenStack.cs)
 
 ## 3，UGUI扩展（拼图专用）
 
@@ -25,7 +25,7 @@
 
 这个功能扩展了用 I， J， K， L，控制物体的小范围移动，还有可以覆盖UGUI自带的快捷键，创建一些列UI，我这里是重新搞了一个快捷键，没有覆盖他的
 
-### [代码路径](Assets/Lib/Editor/UGUI)
+### [代码路径](Assets/Lib/Editor/UGUI/MenuOptions.cs)
 
 ## 4，动态设置GameView
 
@@ -34,7 +34,7 @@
 接口示例
 
 ```c#
-GameExtension.SetGameView(1000, 1000, "测试分辨率");
+CommonUtility.SetGameView(1000, 1000, "测试分辨率");
 ```
 
 ## 5，动态设置闪屏
@@ -44,6 +44,6 @@ GameExtension.SetGameView(1000, 1000, "测试分辨率");
 接口示例
 
 ```c#
-GameExtension.SetSplashScreen("Assets/Res/Splash.png");
+CommonUtility.SetSplashScreen("Assets/Res/Splash.png");
 ```
 
